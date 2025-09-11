@@ -15,7 +15,57 @@ obj/
 # Static assets cache
 *.json.cache
 
-# Visual Studio Code settings
+# Visual Studio Code settings# Build results
+bin/
+obj/
+out/
+[Bb]uild/
+[Ll]og/
+*.log
+
+# User-specific files
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# OS generated files
+.DS_Store
+Thumbs.db
+
+# Visual Studio Code
+.vscode/
+
+# JetBrains Rider
+.idea/
+
+# ASP.NET Static asset cache
+wwwroot/lib/
+wwwroot/dist/
+*.gz
+*.br
+*.json.cache
+
+# NuGet packages
+*.nupkg
+packages/
+*.snupkg
+
+# Project lock files
+project.lock.json
+project.assets.json
+
+# Dotnet CLI
+*.deps.json
+*.runtimeconfig.json
+*.runtimeconfig.dev.json
+
+# Others
+*.db
+*.sqlite
+*.mdf
+*.ldf
+
 .vscode/
 
 # Rider project files
