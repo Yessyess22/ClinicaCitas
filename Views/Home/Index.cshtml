@@ -1,0 +1,79 @@
+﻿
+@using Microsoft.AspNetCore.Identity
+@inject SignInManager<Usuario> SignInManager
+@inject UserManager<Usuario> UserManager
+@{
+    ViewData["Title"] = "Panel de Inicio";
+    string? userName = null;
+    IList<string>? roles = null;
+    if (User.Identity != null && User.Identity.IsAuthenticated)
+    {
+        var user = UserManager.GetUserAsync(User).Result;
+        userName = user?.UserName;
+        if (user != null)
+        {
+            roles = UserManager.GetRolesAsync(user).Result;
+        }
+    }
+}
+<div class="container mt-5">
+    <div class="row mb-4">
+        <div class="col-12 text-center">
+            <h1 class="display-4">
+                @if (userName != null)
+                {
+                    <text>Bienvenido, @userName</text>
+                }
+                else
+                {
+                    <text>Bienvenido a la Clínica</text>
+                }
+            </h1>
+            <p class="lead">Panel de gestión clínica</p>
+            @if (roles != null && roles.Count > 0)
+            {
+                <span class="badge bg-info">@string.Join(", ", roles)</span>
+            }
+        </div>
+    </div>
+    <div class="row g-4 mb-4">
+        <div class="col-md-4">
+            <div class="card shadow h-100">
+                <div class="card-body text-center">
+                    <h5 class="card-title">Próximas Citas</h5>
+                    <p class="card-text">Aquí aparecerán tus próximas citas.</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card shadow h-100">
+                <div class="card-body text-center">
+                    <h5 class="card-title">Pacientes</h5>
+                    <p class="card-text">Acceso rápido a la gestión de pacientes.</p>
+                    <a class="btn btn-outline-primary btn-sm mt-2" asp-controller="Pacientes" asp-action="Index">Ver Pacientes</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card shadow h-100">
+                <div class="card-body text-center">
+                    <h5 class="card-title">Médicos</h5>
+                    <p class="card-text">Acceso rápido a la gestión de médicos.</p>
+                    <a class="btn btn-outline-success btn-sm mt-2" asp-controller="Medicos" asp-action="Index">Ver Médicos</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row mt-4">
+        <div class="col-md-12">
+            <div class="card shadow">
+                <div class="card-header bg-primary text-white">
+                    <i class="bi bi-bell-fill"></i> Avisos y Actividad Reciente
+                </div>
+                <div class="card-body">
+                    <p class="mb-0">Aquí podrás ver avisos importantes y la actividad reciente del sistema.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
