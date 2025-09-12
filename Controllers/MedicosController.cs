@@ -15,19 +15,19 @@ namespace ClinicaCitas.Controllers
             _context = context;
         }
 
-        // GET: Medicos
+    // OBTENER: Médicos
         public async Task<IActionResult> Index()
         {
             return View(await _context.Medicos.ToListAsync());
         }
 
-        // GET: Medicos/Crear
+    // OBTENER: Médicos/Crear
         public IActionResult Crear()
         {
             return View();
         }
 
-        // POST: Medicos/Crear
+    // POST: Médicos/Crear
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Crear(Medico medico)
@@ -41,7 +41,7 @@ namespace ClinicaCitas.Controllers
             return View(medico);
         }
 
-        // GET: Medicos/Editar/5
+    // OBTENER: Médicos/Editar/5
         public async Task<IActionResult> Editar(int? id)
         {
             if (id == null) return NotFound();
@@ -52,7 +52,7 @@ namespace ClinicaCitas.Controllers
             return View(medico);
         }
 
-        // POST: Medicos/Editar/5
+    // POST: Médicos/Editar/5
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Editar(int id, Medico medico)
@@ -68,7 +68,7 @@ namespace ClinicaCitas.Controllers
             return View(medico);
         }
 
-        // GET: Medicos/Eliminar/5
+    // OBTENER: Médicos/Eliminar/5
         public async Task<IActionResult> Eliminar(int? id)
         {
             if (id == null) return NotFound();
@@ -79,7 +79,7 @@ namespace ClinicaCitas.Controllers
             return View(medico);
         }
 
-        // POST: Medicos/Eliminar/5
+    // POST: Médicos/Eliminar/5
         [HttpPost, ActionName("Eliminar")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> EliminarConfirmado(int id)

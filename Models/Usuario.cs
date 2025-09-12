@@ -4,6 +4,6 @@ namespace ClinicaCitas.Models
 {
     public class Usuario : IdentityUser
     {
-        // Puedes agregar propiedades adicionales si lo deseas
+    // Puedes agregar propiedades adicionales si lo deseas
     }
 }

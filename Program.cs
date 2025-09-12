@@ -21,7 +21,7 @@ builder.Services.AddDefaultIdentity<Usuario>(options => options.SignIn.RequireCo
     .AddRoles<Microsoft.AspNetCore.Identity.IdentityRole>()
     .AddEntityFrameworkStores<ApplicationDbContext>();
 
-// Configurar la ruta de login personalizada para Identity
+// Configurar la ruta de inicio de sesión personalizada para Identity
 builder.Services.Configure<Microsoft.AspNetCore.Authentication.Cookies.CookieAuthenticationOptions>(Microsoft.AspNetCore.Identity.IdentityConstants.ApplicationScheme, options =>
 {
     options.LoginPath = "/Usuarios/Login";
@@ -32,7 +32,7 @@ builder.Services.AddControllersWithViews();
 
 var app = builder.Build();
 
-// Inicializar roles
+// Inicializar los roles
 using (var scope = app.Services.CreateScope())
 {
     var services = scope.ServiceProvider;

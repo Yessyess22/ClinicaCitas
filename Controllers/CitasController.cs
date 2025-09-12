@@ -15,7 +15,7 @@ namespace ClinicaCitas.Controllers
             _context = context;
         }
 
-        // GET: Citas
+    // OBTENER: Citas
         public async Task<IActionResult> Index()
         {
             var citas = await _context.Citas
@@ -25,7 +25,7 @@ namespace ClinicaCitas.Controllers
             return View(citas);
         }
 
-        // GET: Citas/Crear
+    // OBTENER: Citas/Crear
         public IActionResult Crear()
         {
             ViewBag.Pacientes = _context.Pacientes.ToList();
@@ -33,14 +33,14 @@ namespace ClinicaCitas.Controllers
             return View();
         }
 
-        // POST: Citas/Crear
+    // POST: Citas/Crear
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Crear(Cita cita)
         {
             if (ModelState.IsValid)
             {
-                // Validar que no haya otra cita en la misma fecha con el mismo médico
+                // Validar que no exista otra cita en la misma fecha y con el mismo médico
                 var existeCita = await _context.Citas
                     .AnyAsync(c => c.MedicoId == cita.MedicoId && c.Fecha == cita.Fecha);
 
@@ -59,7 +59,7 @@ namespace ClinicaCitas.Controllers
             return View(cita);
         }
 
-        // Cambiar estado de la cita (Confirmar o Cancelar)
+    // Cambiar el estado de la cita (Confirmar o Cancelar)
         public async Task<IActionResult> CambiarEstado(int id, string estado)
         {
             var cita = await _context.Citas.FindAsync(id);
@@ -71,7 +71,7 @@ namespace ClinicaCitas.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        // Eliminar una cita
+    // Eliminar una cita
         public async Task<IActionResult> Eliminar(int? id)
         {
             if (id == null) return NotFound();

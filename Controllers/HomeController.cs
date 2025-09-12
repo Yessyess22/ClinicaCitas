@@ -42,8 +42,8 @@ public class HomeController : Controller
             return View(model);
         }
 
-        // Configuración de correo (reemplaza con tus datos reales)
-        var toEmail = "contact@example.com"; // Cambia esto por tu correo real
+    // Configuración de correo (reemplaza con tus datos reales)
+    var toEmail = "contact@example.com"; // Cambia esto por tu correo real
         var subject = "Online Appointment Form";
         var body = $@"<b>Name:</b> {model.Name}<br/>
 <b>Email:</b> {model.Email}<br/>
@@ -94,8 +94,8 @@ public class HomeController : Controller
             return View(model);
         }
 
-        // Configuración de correo (reemplaza con tus datos reales)
-        var toEmail = "contact@example.com"; // Cambia esto por tu correo real
+    // Configuración de correo (reemplaza con tus datos reales)
+    var toEmail = "contact@example.com"; // Cambia esto por tu correo real
         var subject = "Contacto desde el sitio web";
         var body = $@"<b>Name:</b> {model.Name}<br/>
 <b>Email:</b> {model.Email}<br/>
