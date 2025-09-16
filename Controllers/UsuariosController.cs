@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Authorization;
 using System.Threading.Tasks;
 namespace ClinicaCitas.Controllers
 {
-    [Authorize(Roles = "Administrador")]
+    // [Authorize(Roles = "Administrador")]
     public class UsuariosController : Controller
     {
         private readonly UserManager<Usuario> _userManager;
@@ -32,17 +32,27 @@ namespace ClinicaCitas.Controllers
         {
             if (ModelState.IsValid)
             {
+                if (string.IsNullOrWhiteSpace(model.Password))
+                {
+                    ModelState.AddModelError("Password", "La contraseña no puede estar vacía.");
+                    return View(model);
+                }
                 var user = new Usuario { UserName = model.NombreUsuario, Email = model.Email };
                 var result = await _userManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {
+                    TempData["SuccessMessage"] = "Usuario registrado con éxito.";
                     await _signInManager.SignInAsync(user, isPersistent: false);
-                    return RedirectToAction("Index", "Home");
+                    return RedirectToAction("Register");
                 }
                 foreach (var error in result.Errors)
                 {
                     ModelState.AddModelError(string.Empty, error.Description);
                 }
+            }
+            else
+            {
+                ModelState.AddModelError(string.Empty, "Datos inválidos. Verifica los campos e intenta nuevamente.");
             }
             return View(model);
         }
@@ -62,10 +72,14 @@ namespace ClinicaCitas.Controllers
         {
             if (ModelState.IsValid)
             {
-                var result = await _signInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, false);
-                if (result.Succeeded)
+                var user = await _userManager.FindByEmailAsync(model.Email);
+                if (user != null)
                 {
-                    return RedirectToAction("Index", "Home");
+                    var result = await _signInManager.PasswordSignInAsync(user.UserName, model.Password, model.RememberMe, false);
+                    if (result.Succeeded)
+                    {
+                        return RedirectToAction("Index", "Home");
+                    }
                 }
                 ModelState.AddModelError(string.Empty, "Intento de inicio de sesión no válido.");
             }
