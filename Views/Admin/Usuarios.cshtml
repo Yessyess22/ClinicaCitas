@@ -1,0 +1,68 @@
+@{
+    ViewData["Title"] = "Gestión de Usuarios";
+}
+<h2>Gestión de Usuarios</h2>
+<p>Aquí el administrador puede asignar roles a los usuarios registrados.</p>
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="alert alert-success">@TempData["SuccessMessage"]</div>
+}
+<!-- Aquí se debe mostrar la lista de usuarios y un formulario para asignar roles -->
+<!-- Ejemplo visual, la funcionalidad real se agregará en el siguiente paso -->
+<table class="table">
+    <thead>
+        <tr>
+            <th>Usuario</th>
+            <th>Email</th>
+            <th>Roles Actuales</th>
+            <th>Asignar Rol</th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (ViewBag.UserRoles != null)
+        {
+            foreach (var item in ViewBag.UserRoles)
+            {
+                <tr>
+                    <td>@item.Item1.UserName</td>
+                    <td>@item.Item1.Email</td>
+                    <td>@string.Join(", ", item.Item2)</td>
+                    <td>
+                        <form asp-action="AsignarRol" method="post" class="form-inline" style="display:inline-block;">
+                            <input type="hidden" name="userId" value="@item.Item1.Id" />
+                            <select name="rol" class="form-control">
+                                <option value="Administrador">Administrador</option>
+                                <option value="Medico">Medico</option>
+                                <option value="Paciente">Paciente</option>
+                            </select>
+                            <button type="submit" class="btn btn-success btn-sm ml-2">
+                                <i class="bi bi-plus-circle"></i> Asignar rol
+                            </button>
+                        </form>
+                        @foreach (var rolActual in item.Item2)
+                        {
+                            <span style="margin-left:8px;">
+                                <form asp-action="AsignarRol" method="post" style="display:inline-block;">
+                                    <input type="hidden" name="userId" value="@item.Item1.Id" />
+                                    <select name="rol" class="d-none">
+                                        <option value="@rolActual">@rolActual</option>
+                                    </select>
+                                    <button type="submit" class="btn btn-warning btn-sm" title="Editar rol">
+                                        <i class="bi bi-pencil-square"></i>
+                                    </button>
+                                </form>
+                                <form asp-action="EliminarRol" method="post" style="display:inline-block;">
+                                    <input type="hidden" name="userId" value="@item.Item1.Id" />
+                                    <input type="hidden" name="rol" value="@rolActual" />
+                                    <button type="submit" class="btn btn-danger btn-sm" title="Eliminar rol">
+                                        <i class="bi bi-trash"></i>
+                                    </button>
+                                </form>
+                            </span>
+                        }
+                    </td>
+                </tr>
+            }
+        }
+    </tbody>
+</table>

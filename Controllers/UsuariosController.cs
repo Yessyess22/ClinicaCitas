@@ -42,6 +42,7 @@ namespace ClinicaCitas.Controllers
                 if (result.Succeeded)
                 {
                     TempData["SuccessMessage"] = "Usuario registrado con éxito.";
+                    await _userManager.AddToRoleAsync(user, "Paciente"); // Asigna el rol por defecto
                     await _signInManager.SignInAsync(user, isPersistent: false);
                     return RedirectToAction("Register");
                 }
@@ -78,7 +79,25 @@ namespace ClinicaCitas.Controllers
                     var result = await _signInManager.PasswordSignInAsync(user.UserName, model.Password, model.RememberMe, false);
                     if (result.Succeeded)
                     {
-                        return RedirectToAction("Index", "Home");
+                        // Obtener los roles del usuario
+                        var roles = await _userManager.GetRolesAsync(user);
+                        if (roles.Contains("Administrador"))
+                        {
+                            return RedirectToAction("Dashboard", "Admin");
+                        }
+                        else if (roles.Contains("Medico"))
+                        {
+                            return RedirectToAction("Dashboard", "Medico");
+                        }
+                        else if (roles.Contains("Paciente"))
+                        {
+                            return RedirectToAction("Dashboard", "Paciente");
+                        }
+                        else
+                        {
+                            // Si no tiene rol, redirigir al Home
+                            return RedirectToAction("Index", "Home");
+                        }
                     }
                 }
                 ModelState.AddModelError(string.Empty, "Intento de inicio de sesión no válido.");

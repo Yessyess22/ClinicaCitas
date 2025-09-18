@@ -25,6 +25,7 @@ builder.Services.AddDefaultIdentity<Usuario>(options => options.SignIn.RequireCo
 builder.Services.Configure<Microsoft.AspNetCore.Authentication.Cookies.CookieAuthenticationOptions>(Microsoft.AspNetCore.Identity.IdentityConstants.ApplicationScheme, options =>
 {
     options.LoginPath = "/Usuarios/Login";
+    options.AccessDeniedPath = "/Home/AccessDenied";
 });
 
 builder.Services.AddControllersWithViews();
