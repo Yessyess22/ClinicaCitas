@@ -35,20 +35,34 @@
                         <li class="nav-item">
                             <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">Inicio</a>
                         </li>
-                        @if (User.IsInRole("Administrador")) {
-                            <!-- Botón para acceder al panel de administración -->
-                            <li class="nav-item">
-                                <a class="nav-link text-success fw-bold" asp-area="" asp-controller="Admin" asp-action="Usuarios">Panel Administración</a>
-                            </li>
-                        }
                     </ul>
                     <ul class="navbar-nav">
                         @if (User.Identity != null && User.Identity.IsAuthenticated)
                         {
-                            <li class="nav-item">
-                                <form asp-controller="Usuarios" asp-action="Logout" method="post" class="d-inline">
-                                    <button type="submit" class="btn btn-link nav-link">Cerrar Sesión</button>
-                                </form>
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                    <i class="bi bi-person-circle"></i> @User.Identity.Name
+                                </a>
+                                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+                                    <li><span class="dropdown-item-text">@User.Identity.Name</span></li>
+                                    <li><a class="dropdown-item" asp-area="" asp-controller="Usuarios" asp-action="Perfil">Mi Perfil</a></li>
+                                    <li><hr class="dropdown-divider" /></li>
+                                    @if (User.IsInRole("Administrador")) {
+                                        <li><a class="dropdown-item" asp-area="" asp-controller="Admin" asp-action="Usuarios">Panel Administración</a></li>
+                                    }
+                                    @if (User.IsInRole("Medico")) {
+                                        <li><a class="dropdown-item" asp-area="" asp-controller="Medico" asp-action="Dashboard">Panel Médico</a></li>
+                                    }
+                                    @if (User.IsInRole("Paciente")) {
+                                        <li><a class="dropdown-item" asp-area="" asp-controller="Paciente" asp-action="Dashboard">Panel Paciente</a></li>
+                                    }
+                                    <li><hr class="dropdown-divider" /></li>
+                                    <li>
+                                        <form asp-controller="Usuarios" asp-action="Logout" method="post" class="d-inline">
+                                            <button type="submit" class="dropdown-item">Cerrar Sesión</button>
+                                        </form>
+                                    </li>
+                                </ul>
                             </li>
                         }
                         else
@@ -68,6 +82,9 @@
         </main>
     </div>
 
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="/assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
     @RenderSection("Scripts", required: false)
 </body>
 </html>

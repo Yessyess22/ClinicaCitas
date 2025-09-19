@@ -1,0 +1,73 @@
+@{
+    ViewData["Title"] = "Mi Perfil";
+}
+
+
+<div class="container mt-5">
+    <h2>Mi Perfil</h2>
+    <form method="post" asp-action="Perfil">
+        <div class="row">
+            <div class="col-md-6 d-flex flex-column align-items-center justify-content-center">
+                <div class="mb-3 w-75 text-center position-relative">
+                    @if (!string.IsNullOrEmpty(Model.FotoPerfil)) {
+                        <img src="@Model.FotoPerfil" alt="Foto de perfil" class="img-thumbnail mt-2" style="max-width:250px; max-height:250px;" />
+                        <button type="button" class="btn btn-outline-primary rounded-circle position-absolute" style="top:10px; right:10px; width:40px; height:40px;">
+                            <i class="bi bi-plus-lg"></i>
+                        </button>
+                    } else {
+                        <div class="border bg-light d-flex align-items-center justify-content-center position-relative" style="width:250px; height:250px;">
+                            <span class="text-muted">Sin foto</span>
+                            <button type="button" class="btn btn-outline-primary rounded-circle position-absolute" style="top:10px; right:10px; width:40px; height:40px;">
+                                <i class="bi bi-plus-lg"></i>
+                            </button>
+                        </div>
+                    }
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="mb-3">
+                    <label for="NombreUsuario" class="form-label">Nombre de usuario</label>
+                    <input type="text" class="form-control" id="NombreUsuario" name="NombreUsuario" value="@Model.NombreUsuario" readonly />
+                </div>
+                <div class="mb-3">
+                    <label for="Email" class="form-label">Correo electrónico</label>
+                    <input type="email" class="form-control" id="Email" name="Email" value="@Model.Email" />
+                </div>
+                <div class="mb-3">
+                    <label for="NombreCompleto" class="form-label">Nombre completo</label>
+                    <input type="text" class="form-control" id="NombreCompleto" name="NombreCompleto" value="@Model.NombreCompleto" />
+                </div>
+                <div class="mb-3">
+                    <label for="FechaNacimiento" class="form-label">Fecha de nacimiento</label>
+                    <input type="date" class="form-control" id="FechaNacimiento" name="FechaNacimiento" value="@(Model.FechaNacimiento?.ToString("yyyy-MM-dd"))" />
+                </div>
+                <div class="mb-3">
+                    <label for="Telefono" class="form-label">Teléfono</label>
+                    <input type="tel" class="form-control" id="Telefono" name="Telefono" value="@Model.Telefono" />
+                </div>
+                <div class="mb-3">
+                    <label for="Direccion" class="form-label">Dirección</label>
+                    <input type="text" class="form-control" id="Direccion" name="Direccion" value="@Model.Direccion" />
+                </div>
+                <div class="mb-3">
+                    <label for="CI" class="form-label">CI</label>
+                    <input type="text" class="form-control" id="CI" name="CI" value="@Model.CI" />
+                </div>
+                <div class="mb-3">
+                    <label for="Genero" class="form-label">Género</label>
+                    <select class="form-control" id="Genero" name="Genero">
+                        <option value="" selected="@(string.IsNullOrEmpty(Model.Genero))">Selecciona...</option>
+                        <option value="Masculino" selected="@(Model.Genero == "Masculino")">Masculino</option>
+                        <option value="Femenino" selected="@(Model.Genero == "Femenino")">Femenino</option>
+                        <option value="Otro" selected="@(Model.Genero == "Otro")">Otro</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+        <div class="row mt-4">
+            <div class="col-12 text-center">
+                <button type="submit" class="btn btn-success px-5">Guardar cambios</button>
+            </div>
+        </div>
+    </form>
+</div>

@@ -46,6 +46,32 @@ if (!app.Environment.IsDevelopment())
     app.UseHsts();
 }
 
+
+// Middleware personalizado: mensaje educativo y registro de accesos
+
+app.Use(async (context, next) =>
+{
+    // Mensaje educativo
+    Console.WriteLine("Recuerda no compartir tu contraseña.");
+
+    // Registro de acceso en archivo
+    var user = context.User?.Identity?.IsAuthenticated == true ? context.User.Identity.Name : "Invitado";
+    var path = context.Request.Path;
+    var logLine = $"Acceso: Usuario={user}, Ruta={path}, Fecha={DateTime.Now}\n";
+    var logPath = Path.Combine(Directory.GetCurrentDirectory(), "Logs", "accesos.log");
+    try
+    {
+        Directory.CreateDirectory(Path.GetDirectoryName(logPath)!);
+        await File.AppendAllTextAsync(logPath, logLine);
+    }
+    catch (Exception ex)
+    {
+        Console.WriteLine($"Error al escribir en el log: {ex.Message}");
+    }
+
+    await next.Invoke();
+});
+
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 

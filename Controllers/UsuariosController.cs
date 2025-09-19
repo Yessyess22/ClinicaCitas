@@ -1,8 +1,10 @@
-using ClinicaCitas.Models;
-using Microsoft.AspNetCore.Identity;
+using System;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
-using System.Threading.Tasks;
+using Microsoft.AspNetCore.Identity;
+using ClinicaCitas.Models;
+
 namespace ClinicaCitas.Controllers
 {
     // [Authorize(Roles = "Administrador")]
@@ -10,12 +12,14 @@ namespace ClinicaCitas.Controllers
     {
         private readonly UserManager<Usuario> _userManager;
         private readonly SignInManager<Usuario> _signInManager;
+            private readonly IUserStore<Usuario> _userStore;
 
-        public UsuariosController(UserManager<Usuario> userManager, SignInManager<Usuario> signInManager)
-        {
-            _userManager = userManager;
-            _signInManager = signInManager;
-        }
+            public UsuariosController(UserManager<Usuario> userManager, SignInManager<Usuario> signInManager, IUserStore<Usuario> userStore)
+            {
+                _userManager = userManager;
+                _signInManager = signInManager;
+                _userStore = userStore;
+            }
 
 
         [AllowAnonymous]
@@ -74,7 +78,7 @@ namespace ClinicaCitas.Controllers
             if (ModelState.IsValid)
             {
                 var user = await _userManager.FindByEmailAsync(model.Email);
-                if (user != null)
+                if (user != null && !string.IsNullOrEmpty(user.UserName))
                 {
                     var result = await _signInManager.PasswordSignInAsync(user.UserName, model.Password, model.RememberMe, false);
                     if (result.Succeeded)
@@ -111,5 +115,103 @@ namespace ClinicaCitas.Controllers
             await _signInManager.SignOutAsync();
             return RedirectToAction("Index", "Home");
         }
+
+            [Authorize]
+            [HttpGet]
+            public async Task<IActionResult> Perfil()
+            {
+                var user = await _userManager.GetUserAsync(User);
+                if (user == null)
+                {
+                    return RedirectToAction("Login");
+                }
+                var model = new PerfilViewModel
+                {
+                    NombreUsuario = user.UserName,
+                    Email = user.Email,
+                    NombreCompleto = user.NombreCompleto,
+                    FechaNacimiento = user.FechaNacimiento,
+                    Telefono = user.Telefono,
+                    Direccion = user.Direccion,
+                    CI = user.CI,
+                    Genero = user.Genero,
+                    FotoPerfil = user.FotoPerfil
+                };
+                return View(model);
+            }
+
+            [Authorize]
+            [HttpPost]
+            public async Task<IActionResult> Perfil(PerfilViewModel model)
+            {
+                if (!ModelState.IsValid)
+                {
+                    return View(model);
+                }
+                var user = await _userManager.GetUserAsync(User);
+                if (user == null)
+                {
+                    return RedirectToAction("Login");
+                }
+                // Actualiza todos los campos editables del perfil
+                bool updated = false;
+                if (user.Email != model.Email)
+                {
+                    user.Email = model.Email;
+                    user.NormalizedEmail = model.Email?.ToUpper();
+                    updated = true;
+                }
+                if (user.NombreCompleto != model.NombreCompleto)
+                {
+                    user.NombreCompleto = model.NombreCompleto;
+                    updated = true;
+                }
+                if (user.FechaNacimiento != model.FechaNacimiento)
+                {
+                    user.FechaNacimiento = model.FechaNacimiento;
+                    updated = true;
+                }
+                if (user.Telefono != model.Telefono)
+                {
+                    user.Telefono = model.Telefono;
+                    updated = true;
+                }
+                if (user.Direccion != model.Direccion)
+                {
+                    user.Direccion = model.Direccion;
+                    updated = true;
+                }
+                if (user.CI != model.CI)
+                {
+                    user.CI = model.CI;
+                    updated = true;
+                }
+                if (user.Genero != model.Genero)
+                {
+                    user.Genero = model.Genero;
+                    updated = true;
+                }
+                if (user.FotoPerfil != model.FotoPerfil)
+                {
+                    user.FotoPerfil = model.FotoPerfil;
+                    updated = true;
+                }
+                if (updated)
+                {
+                    var result = await _userManager.UpdateAsync(user);
+                    if (result.Succeeded)
+                    {
+                        TempData["SuccessMessage"] = "Perfil actualizado correctamente.";
+                    }
+                    else
+                    {
+                        foreach (var error in result.Errors)
+                        {
+                            ModelState.AddModelError(string.Empty, error.Description);
+                        }
+                    }
+                }
+                return View(model);
+            }
     }
 }

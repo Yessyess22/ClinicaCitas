@@ -31,7 +31,17 @@
                 <label asp-for="Password" class="form-label"></label>
                 <input asp-for="Password" class="form-control" type="password" style="max-width: 100%;" />
                 <span asp-validation-for="Password" class="text-danger"></span>
+                <div id="msg-educativo-register" class="alert alert-info mt-2" style="display:none;">Recuerda no compartir tu contraseña.</div>
             </div>
+            <script>
+                window.onload = function() {
+                    var msg = document.getElementById('msg-educativo-register');
+                    if (msg) {
+                        msg.style.display = 'block';
+                        setTimeout(function() { msg.style.display = 'none'; }, 4000);
+                    }
+                };
+            </script>
             <div class="mb-3">
                 <label asp-for="ConfirmPassword" class="form-label"></label>
                 <input asp-for="ConfirmPassword" class="form-control" type="password" style="max-width: 100%;" />
