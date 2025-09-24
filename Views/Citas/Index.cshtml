@@ -1,0 +1,33 @@
+@model IEnumerable<ClinicaCitas.Models.Cita>
+
+@if (TempData["CitaAgendada"] != null)
+{
+    <div class="alert alert-success text-center">@TempData["CitaAgendada"]</div>
+}
+@{
+    ViewData["Title"] = "Mis Citas";
+}
+<div class="container mt-5">
+    <h2>Mis Citas</h2>
+    <table class="table table-bordered table-striped mt-3">
+        <thead>
+            <tr>
+                <th>Fecha</th>
+                <th>Médico</th>
+                <th>Especialidad</th>
+                <th>Estado</th>
+            </tr>
+        </thead>
+        <tbody>
+        @foreach (var cita in Model)
+        {
+            <tr>
+                <td>@cita.Fecha.ToString("dd/MM/yyyy HH:mm")</td>
+                <td>@(cita.Medico != null ? cita.Medico.Nombre + " " + cita.Medico.Apellido : "-")</td>
+                <td>@(cita.Medico?.Especialidad?.Nombre ?? "-")</td>
+                <td>@cita.Estado</td>
+            </tr>
+        }
+        </tbody>
+    </table>
+</div>

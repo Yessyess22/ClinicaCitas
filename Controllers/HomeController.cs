@@ -6,15 +6,20 @@ namespace ClinicaCitas.Controllers;
 
 public class HomeController : Controller
 {
-    private readonly ILogger<HomeController> _logger;
 
-    public HomeController(ILogger<HomeController> logger)
+    private readonly ILogger<HomeController> _logger;
+    private readonly Data.ApplicationDbContext _context;
+
+    public HomeController(ILogger<HomeController> logger, Data.ApplicationDbContext context)
     {
         _logger = logger;
+        _context = context;
     }
 
     public IActionResult Index()
     {
+        ViewBag.Especialidades = _context.Especialidades.ToList();
+        ViewBag.Medicos = _context.Medicos.ToList();
         return View();
     }
 
@@ -47,8 +52,8 @@ public class HomeController : Controller
             return View(model);
         }
 
-    // Configuración de correo (reemplaza con tus datos reales)
-    var toEmail = "contact@example.com"; // Cambia esto por tu correo real
+    // Configuración de correo
+    var toEmail = "contact@example.com";
         var subject = "Online Appointment Form";
         var body = $@"<b>Name:</b> {model.Name}<br/>
 <b>Email:</b> {model.Email}<br/>
@@ -68,9 +73,9 @@ public class HomeController : Controller
                 message.IsBodyHtml = true;
                 message.From = new System.Net.Mail.MailAddress(model.Email, model.Name);
 
-                using (var smtp = new System.Net.Mail.SmtpClient("smtp.example.com", 587)) // Cambia smtp.example.com y puerto
+                using (var smtp = new System.Net.Mail.SmtpClient("smtp.example.com", 587))
                 {
-                    smtp.Credentials = new System.Net.NetworkCredential("usuario", "contraseña"); // Cambia usuario y contraseña
+                    smtp.Credentials = new System.Net.NetworkCredential("usuario", "contraseña"); 
                     smtp.EnableSsl = true;
                     await smtp.SendMailAsync(message);
                 }
@@ -99,8 +104,7 @@ public class HomeController : Controller
             return View(model);
         }
 
-    // Configuración de correo (reemplaza con tus datos reales)
-    var toEmail = "contact@example.com"; // Cambia esto por tu correo real
+    var toEmail = "contact@example.com"; 
         var subject = "Contacto desde el sitio web";
         var body = $@"<b>Name:</b> {model.Name}<br/>
 <b>Email:</b> {model.Email}<br/>
@@ -117,9 +121,9 @@ public class HomeController : Controller
                 message.IsBodyHtml = true;
                 message.From = new System.Net.Mail.MailAddress(model.Email, model.Name);
 
-                using (var smtp = new System.Net.Mail.SmtpClient("smtp.example.com", 587)) // Cambia smtp.example.com y puerto
+                using (var smtp = new System.Net.Mail.SmtpClient("smtp.example.com", 587))
                 {
-                    smtp.Credentials = new System.Net.NetworkCredential("usuario", "contraseña"); // Cambia usuario y contraseña
+                    smtp.Credentials = new System.Net.NetworkCredential("usuario", "contraseña");
                     smtp.EnableSsl = true;
                     await smtp.SendMailAsync(message);
                 }

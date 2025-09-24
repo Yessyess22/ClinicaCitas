@@ -33,11 +33,13 @@ builder.Services.AddControllersWithViews();
 
 var app = builder.Build();
 
-// Inicializar los roles
+// Inicializar los roles y médicos
 using (var scope = app.Services.CreateScope())
 {
     var services = scope.ServiceProvider;
     ClinicaCitas.Data.SeedRoles.InitializeAsync(services).GetAwaiter().GetResult();
+    var context = services.GetRequiredService<ClinicaCitas.Data.ApplicationDbContext>();
+    ClinicaCitas.Data.SeedMedicos.Initialize(context);
 }
 
 if (!app.Environment.IsDevelopment())

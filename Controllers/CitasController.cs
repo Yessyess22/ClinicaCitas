@@ -14,6 +14,52 @@ namespace ClinicaCitas.Controllers
         {
             _context = context;
         }
+    [HttpPost]
+    [Authorize(Roles = "Paciente")]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> AgendarDesdeHome(string name, string email, string phone, string date, string department, string doctor, string message)
+    {
+        // Buscar el paciente por el usuario logueado
+        var userName = User.Identity?.Name;
+        var paciente = await _context.Pacientes.FirstOrDefaultAsync(p => p.Nombre == name || p.Telefono == phone || p.CI == userName);
+        if (paciente == null)
+        {
+            paciente = new Paciente {
+                Nombre = name,
+                Apellido = "",
+                Telefono = phone,
+                CI = userName ?? "",
+                FechaNacimiento = DateTime.Now
+            };
+            _context.Pacientes.Add(paciente);
+            await _context.SaveChangesAsync();
+        }
+
+        // department = EspecialidadId, doctor = MedicoId
+        if (!int.TryParse(department, out int especialidadId)) especialidadId = 0;
+        if (!int.TryParse(doctor, out int medicoId)) medicoId = 0;
+        var medico = await _context.Medicos.FirstOrDefaultAsync(m => m.MedicoId == medicoId && m.EspecialidadId == especialidadId);
+        if (medico == null)
+        {
+            TempData["CitaAgendada"] = "Error: Debe seleccionar un médico válido.";
+            return RedirectToAction("Index", "Home");
+        }
+
+        DateTime fechaCita = DateTime.TryParse(date, out var f) ? f : DateTime.Now;
+
+        var cita = new Cita
+        {
+            PacienteId = paciente.PacienteId,
+            MedicoId = medico.MedicoId,
+            Fecha = fechaCita,
+            Estado = "Pendiente"
+        };
+        _context.Citas.Add(cita);
+        await _context.SaveChangesAsync();
+        TempData["CitaAgendada"] = "¡Cita agendada exitosamente!";
+        return RedirectToAction("Index", "Citas");
+    }
+
 
     // OBTENER: Citas
         public async Task<IActionResult> Index()
