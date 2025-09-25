@@ -1,0 +1,43 @@
+@model IEnumerable<ClinicaCitas.Models.Cita>
+@{
+    ViewData["Title"] = "Mis Citas";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="container mt-5">
+    <h2 style="color:#3fbbc0;">Mis Citas</h2>
+    <hr />
+    <table class="table table-bordered table-hover">
+        <thead>
+            <tr>
+                <th>Paciente</th>
+                <th>Teléfono</th>
+                <th>Fecha</th>
+                <th>Estado</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+        @foreach (var cita in Model)
+        {
+            <tr>
+                <td>@cita.Paciente?.Nombre @cita.Paciente?.Apellido</td>
+                <td>@cita.Paciente?.Telefono</td>
+                <td>@cita.Fecha.ToString("dd/MM/yyyy HH:mm")</td>
+                <td>@cita.Estado</td>
+                <td>
+                    @if (cita.Estado == "Pendiente") {
+                        <form asp-action="AceptarCita" method="post" style="display:inline">
+                            <input type="hidden" name="id" value="@cita.CitaId" />
+                            <button type="submit" class="btn btn-sm" style="background:#3fbbc0;color:#fff;">Aceptar</button>
+                        </form>
+                        <form asp-action="RechazarCita" method="post" style="display:inline">
+                            <input type="hidden" name="id" value="@cita.CitaId" />
+                            <button type="submit" class="btn btn-danger btn-sm">Rechazar</button>
+                        </form>
+                    }
+                </td>
+            </tr>
+        }
+        </tbody>
+    </table>
+</div>

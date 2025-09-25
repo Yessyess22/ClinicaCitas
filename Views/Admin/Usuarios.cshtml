@@ -29,15 +29,36 @@
                     <td>
                         <form asp-action="AsignarRol" method="post" class="form-inline" style="display:inline-block;">
                             <input type="hidden" name="userId" value="@item.Item1.Id" />
-                            <select name="rol" class="form-control">
+                            <select name="rol" class="form-control" onchange="toggleEspecialidad(this, 'especialidad-@item.Item1.Id')">
                                 <option value="Administrador">Administrador</option>
                                 <option value="Medico">Medico</option>
                                 <option value="Paciente">Paciente</option>
+                            </select>
+                            <select name="especialidadId" id="especialidad-@item.Item1.Id" class="form-control ml-2" style="display:none;">
+                                <option value="">Seleccione especialidad</option>
+                                @{
+                                    var db = Context.RequestServices.GetService(typeof(ClinicaCitas.Data.ApplicationDbContext)) as ClinicaCitas.Data.ApplicationDbContext;
+                                    var especialidades = db?.Especialidades.ToList() ?? new List<ClinicaCitas.Models.Especialidad>();
+                                    foreach (var esp in especialidades)
+                                    {
+                                        <option value="@esp.EspecialidadId">@esp.Nombre</option>
+                                    }
+                                }
                             </select>
                             <button type="submit" class="btn btn-sm ml-2" style="background:#3fbbc0;color:#fff;border:none;box-shadow:0 2px 8px rgba(63,187,192,0.15);padding:8px 32px;font-size:14px;letter-spacing:1px;border-radius:5px;">
                                 <i class="bi bi-plus-circle"></i> Asignar rol
                             </button>
                         </form>
+                        <script>
+                        function toggleEspecialidad(select, especialidadId) {
+                            var esp = document.getElementById(especialidadId);
+                            if (select.value === 'Medico') {
+                                esp.style.display = '';
+                            } else {
+                                esp.style.display = 'none';
+                            }
+                        }
+                        </script>
                         @foreach (var rolActual in item.Item2)
                         {
                             <span style="margin-left:8px;">

@@ -27,7 +27,7 @@
             </div>
             <div class="row">
                 <div class="col-md-4 form-group mt-3">
-                    <input type="datetime-local" name="date" class="form-control datepicker" id="date" placeholder="Fecha de la Cita" required="">
+                    <input type="datetime-local" name="date" class="form-control datepicker" id="date" placeholder="Fecha de la Cita" required min="@DateTime.Now.ToString("yyyy-MM-ddTHH:mm")">
                 </div>
                 <div class="col-md-4 form-group mt-3">
                     <select name="department" id="department" class="form-select" required>

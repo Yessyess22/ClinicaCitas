@@ -33,11 +33,12 @@ namespace ClinicaCitas.Controllers
             return View();
         }
 
-        // Acción para asignar rol a un usuario
+        // Acción para asignar rol a un usuario y vincular como médico
         [HttpPost]
-        public async Task<IActionResult> AsignarRol(string userId, string rol)
+        public async Task<IActionResult> AsignarRol(string userId, string rol, int? especialidadId)
         {
             var userManager = HttpContext.RequestServices.GetService(typeof(UserManager<ClinicaCitas.Models.Usuario>)) as UserManager<ClinicaCitas.Models.Usuario>;
+            var db = HttpContext.RequestServices.GetService(typeof(ClinicaCitas.Data.ApplicationDbContext)) as ClinicaCitas.Data.ApplicationDbContext;
             if (userManager != null)
             {
                 var user = await userManager.FindByIdAsync(userId);
@@ -47,6 +48,27 @@ namespace ClinicaCitas.Controllers
                     var rolesActuales = await userManager.GetRolesAsync(user);
                     await userManager.RemoveFromRolesAsync(user, rolesActuales);
                     await userManager.AddToRoleAsync(user, rol);
+                    // Si el rol es Médico, vincular usuario con Medico y especialidad
+                    if (rol == "Medico" && especialidadId.HasValue && db != null)
+                    {
+                        var medico = db.Medicos.FirstOrDefault(m => m.UsuarioId == userId);
+                        if (medico == null)
+                        {
+                            medico = new ClinicaCitas.Models.Medico {
+                                Nombre = user.NombreCompleto ?? user.UserName ?? "",
+                                Apellido = "",
+                                Telefono = user.Telefono,
+                                UsuarioId = userId,
+                                EspecialidadId = especialidadId.Value
+                            };
+                            db.Medicos.Add(medico);
+                        }
+                        else
+                        {
+                            medico.EspecialidadId = especialidadId.Value;
+                        }
+                        db.SaveChanges();
+                    }
                     TempData["SuccessMessage"] = $"Rol '{rol}' asignado correctamente.";
                 }
             }

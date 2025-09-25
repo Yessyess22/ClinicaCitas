@@ -24,7 +24,12 @@
             </div>
             <div class="mb-3">
                 <label asp-for="Password" class="form-label"></label>
-                <input asp-for="Password" class="form-control" type="password" style="max-width: 100%;" />
+                <div class="input-group">
+                    <input asp-for="Password" class="form-control" type="password" id="loginPassword" style="max-width: 100%;" />
+                    <span class="input-group-text" style="cursor:pointer;" onclick="togglePassword('loginPassword', this)">
+                        <i class="bi bi-eye"></i>
+                    </span>
+                </div>
                 <span asp-validation-for="Password" class="text-danger"></span>
                 <div id="msg-educativo-login" class="alert mt-2" style="display:none; background:#3fbbc0; color:#fff;">Recuerda no compartir tu contraseña.</div>
             </div>
@@ -36,6 +41,19 @@
                         setTimeout(function() { msg.style.display = 'none'; }, 4000);
                     }
                 };
+                function togglePassword(inputId, iconSpan) {
+                    var input = document.getElementById(inputId);
+                    var icon = iconSpan.querySelector('i');
+                    if (input.type === 'password') {
+                        input.type = 'text';
+                        icon.classList.remove('bi-eye');
+                        icon.classList.add('bi-eye-slash');
+                    } else {
+                        input.type = 'password';
+                        icon.classList.remove('bi-eye-slash');
+                        icon.classList.add('bi-eye');
+                    }
+                }
             </script>
             <div class="mb-3 form-check">
                 <input asp-for="RememberMe" class="form-check-input" />
