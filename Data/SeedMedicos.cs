@@ -9,18 +9,9 @@ namespace ClinicaCitas.Data
     {
         public static void Initialize(ApplicationDbContext context)
         {
-            // Eliminar todas las citas asociadas a médicos para evitar conflictos de clave foránea
-            if (context.Citas.Any())
-            {
-                context.Citas.RemoveRange(context.Citas);
-                context.SaveChanges();
-            }
-            // Eliminar todos los médicos existentes
+            // Solo agregar médicos si no existen
             if (context.Medicos.Any())
-            {
-                context.Medicos.RemoveRange(context.Medicos);
-                context.SaveChanges();
-            }
+                return;
 
             // Insertar médicos reales: 3 por especialidad
             var especialidades = context.Especialidades.ToList();

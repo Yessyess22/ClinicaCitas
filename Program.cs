@@ -81,8 +81,16 @@ app.UseRouting();
 app.UseAuthentication();
 app.UseAuthorization();
 
+
+// Ruta personalizada para /Citas
+app.MapControllerRoute(
+    name: "citas_index",
+    pattern: "Citas",
+    defaults: new { controller = "Citas", action = "Index" });
+
+// Ruta por defecto
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Usuarios}/{action=Login}/{id?}");
+    pattern: "{controller=Home}/{action=Index}/{id?}");
 
 app.Run();

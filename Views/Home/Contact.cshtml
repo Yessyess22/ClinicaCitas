@@ -7,7 +7,7 @@
 
 @if (ViewBag.Message != null)
 {
-    <div class="alert alert-success">@ViewBag.Message</div>
+    <div class="alert" style="background:#3fbbc0;color:#fff;">@ViewBag.Message</div>
 }
 
 <form asp-action="Contact" method="post">
@@ -31,7 +31,7 @@
         <textarea asp-for="Message" class="form-control"></textarea>
         <span asp-validation-for="Message" class="text-danger"></span>
     </div>
-    <button type="submit" class="btn btn-primary">Enviar</button>
+    <button type="submit" class="btn" style="background-color:#3fbbc0; color:#fff;">Enviar</button>
 </form>
 
 @section Scripts {

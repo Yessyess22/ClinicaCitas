@@ -62,12 +62,22 @@ namespace ClinicaCitas.Controllers
 
 
     // OBTENER: Citas
-        public async Task<IActionResult> Index()
+    [HttpGet]
+    public async Task<IActionResult> Index()
         {
-            var citas = await _context.Citas
-                .Include(c => c.Paciente)
-                .Include(c => c.Medico)
-                .ToListAsync();
+            // Filtrar solo las citas del paciente logueado
+            var userName = User.Identity?.Name;
+            var paciente = await _context.Pacientes.FirstOrDefaultAsync(p => p.CI == userName);
+            List<Cita> citas = new List<Cita>();
+            if (paciente != null)
+            {
+                citas = await _context.Citas
+                    .Include(c => c.Paciente)
+                    .Include(c => c.Medico)
+                        .ThenInclude(m => m.Especialidad)
+                    .Where(c => c.PacienteId == paciente.PacienteId)
+                    .ToListAsync();
+            }
             return View(citas);
         }
 

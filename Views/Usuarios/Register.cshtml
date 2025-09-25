@@ -7,7 +7,7 @@
         <h2 class="text-center mb-4">Registro de Usuario</h2>
         @if (TempData["SuccessMessage"] != null)
         {
-            <div class="alert alert-success text-center">@TempData["SuccessMessage"]</div>
+            <div class="alert text-center" style="background:#3fbbc0;color:#fff;">@TempData["SuccessMessage"]</div>
         }
         @if (!ViewData.ModelState.IsValid)
         {
@@ -31,7 +31,7 @@
                 <label asp-for="Password" class="form-label"></label>
                 <input asp-for="Password" class="form-control" type="password" style="max-width: 100%;" />
                 <span asp-validation-for="Password" class="text-danger"></span>
-                <div id="msg-educativo-register" class="alert alert-info mt-2" style="display:none;">Recuerda no compartir tu contraseña.</div>
+                <div id="msg-educativo-register" class="alert mt-2" style="display:none; background:#3fbbc0; color:#fff;">Recuerda no compartir tu contraseña.</div>
             </div>
             <script>
                 window.onload = function() {

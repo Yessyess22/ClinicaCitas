@@ -10,7 +10,7 @@
     {
         if (TempData["CitaAgendada"] != null)
         {
-            <div class="alert alert-success text-center">@TempData["CitaAgendada"]</div>
+            <div class="alert text-center" style="background:#3fbbc0;color:#fff;">@TempData["CitaAgendada"]</div>
         }
     <form action="/Citas/AgendarDesdeHome" method="post" role="form">
             @Html.AntiForgeryToken()
@@ -66,27 +66,61 @@
                 <textarea class="form-control" name="message" rows="5" placeholder="Mensaje (Opcional)"></textarea>
             </div>
             <div class="mt-3">
-                <div class="text-center">
-                    <button type="submit" class="btn btn-primary btn-lg px-5 py-2">
-                        Agendar Cita
-                    </button>
+                <div class="mt-3">
+                    <div class="loading" style="display:none; color:#3fbbc0; font-weight:bold;">Enviando solicitud...</div>
+                    <div class="error-message" style="display:none; color:#df1529; font-weight:bold;">Ocurrió un error. Intenta de nuevo.</div>
+                    <div class="sent-message" style="display:none; color:#3fbbc0; font-weight:bold;">¡Tu cita fue enviada correctamente! Gracias.</div>
+                    <div class="text-center">
+                        <button type="button" onclick="enviarCita(this);return false;" class="btn-get-started" style="background:#3fbbc0;color:#fff;border:none;box-shadow:0 2px 8px rgba(63,187,192,0.15);padding:8px 32px;font-size:14px;letter-spacing:1px;border-radius:5px;">Agendar Cita</button>
+                    </div>
                 </div>
-            </div>
-            <style>
-                .btn-agua:hover, .btn-agua:focus {
-                    background: #17a589 !important;
-                    color: #fff !important;
-                    box-shadow: 0 8px 24px rgba(32,201,151,0.2);
-                    transform: translateY(-2px) scale(1.03);
+                <script>
+                function enviarCita(btn) {
+                    var form = btn.closest('form');
+                    if (!form.checkValidity()) {
+                        form.reportValidity();
+                        return;
+                    }
+                    var loading = form.querySelector('.loading');
+                    var error = form.querySelector('.error-message');
+                    var sent = form.querySelector('.sent-message');
+                    loading.style.display = 'block';
+                    error.style.display = 'none';
+                    sent.style.display = 'none';
+                    btn.style.pointerEvents = 'none';
+                    btn.style.opacity = '0.7';
+                    fetch(form.action, {
+                        method: 'POST',
+                        body: new FormData(form),
+                        headers: { 'X-Requested-With': 'XMLHttpRequest' }
+                    })
+                    .then(r => {
+                        loading.style.display = 'none';
+                        btn.style.pointerEvents = '';
+                        btn.style.opacity = '';
+                        if (r.ok) {
+                            sent.style.display = 'block';
+                            form.reset();
+                        } else {
+                            error.style.display = 'block';
+                        }
+                    })
+                    .catch(() => {
+                        loading.style.display = 'none';
+                        error.style.display = 'block';
+                        btn.style.pointerEvents = '';
+                        btn.style.opacity = '';
+                    });
                 }
-            </style>
+                </script>
+            </div>
         </form>
     }
     else
     {
         <div class="alert alert-info text-center">Debes iniciar sesión como paciente para agendar una cita.</div>
         <div class="text-center mt-3">
-            <a href="/Usuarios/Login" class="btn btn-primary">Iniciar Sesión</a>
+            <a href="/Usuarios/Login" class="btn" style="background:#3fbbc0;color:#fff;border:none;box-shadow:0 2px 8px rgba(63,187,192,0.15);padding:8px 32px;font-size:14px;letter-spacing:1px;border-radius:5px;">Iniciar Sesión</a>
         </div>
     }
   </div>

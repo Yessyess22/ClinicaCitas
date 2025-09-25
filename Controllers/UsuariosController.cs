@@ -47,7 +47,7 @@ namespace ClinicaCitas.Controllers
                 {
                     TempData["SuccessMessage"] = "Usuario registrado con éxito.";
                     await _userManager.AddToRoleAsync(user, "Paciente"); // Asigna el rol por defecto
-                    await _signInManager.SignInAsync(user, isPersistent: false);
+                    // No iniciar sesión automáticamente
                     return RedirectToAction("Register");
                 }
                 foreach (var error in result.Errors)
@@ -95,7 +95,7 @@ namespace ClinicaCitas.Controllers
                         }
                         else if (roles.Contains("Paciente"))
                         {
-                            return RedirectToAction("Dashboard", "Paciente");
+                            return RedirectToAction("Index", "Home");
                         }
                         else
                         {
@@ -202,6 +202,7 @@ namespace ClinicaCitas.Controllers
                     if (result.Succeeded)
                     {
                         TempData["SuccessMessage"] = "Perfil actualizado correctamente.";
+                        return RedirectToAction("Perfil");
                     }
                     else
                     {

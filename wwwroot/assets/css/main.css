@@ -1,3 +1,24 @@
+/* Global .btn-get-started style for all sections */
+.btn-get-started {
+  font-weight: 400;
+  font-size: 14px;
+  letter-spacing: 1px;
+  display: inline-block;
+  padding: 8px 32px;
+  margin: 10px;
+  border-radius: 5px;
+  color: var(--contrast-color);
+  background: var(--accent-color);
+  border: none;
+  box-shadow: 0 2px 8px rgba(63,187,192,0.15);
+  transition: background 0.3s, box-shadow 0.3s, color 0.3s;
+}
+.btn-get-started:hover, .btn-get-started:focus {
+  background: color-mix(in srgb, var(--accent-color) 90%, white 15%);
+  box-shadow: 0 4px 16px rgba(63,187,192,0.25);
+  color: var(--contrast-color);
+  text-decoration: none;
+}
 /* Fonts */
 :root {
   --default-font: "Roboto",  system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", "Liberation Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";

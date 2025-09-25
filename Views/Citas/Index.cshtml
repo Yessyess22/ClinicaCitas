@@ -2,13 +2,13 @@
 
 @if (TempData["CitaAgendada"] != null)
 {
-    <div class="alert alert-success text-center">@TempData["CitaAgendada"]</div>
+    <div class="alert text-center" style="background:#3fbbc0;color:#fff;">@TempData["CitaAgendada"]</div>
 }
 @{
     ViewData["Title"] = "Mis Citas";
 }
 <div class="container mt-5">
-    <h2>Mis Citas</h2>
+    <h2 style="color:#3fbbc0;">Mis Citas</h2>
     <table class="table table-bordered table-striped mt-3">
         <thead>
             <tr>

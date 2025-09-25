@@ -1,11 +1,11 @@
 @{
     ViewData["Title"] = "Gestión de Usuarios";
 }
-<h2>Gestión de Usuarios</h2>
+<h2 style="color:#3fbbc0;">Gestión de Usuarios</h2>
 <p>Aquí el administrador puede asignar roles a los usuarios registrados.</p>
 @if (TempData["SuccessMessage"] != null)
 {
-    <div class="alert alert-success">@TempData["SuccessMessage"]</div>
+    <div class="alert" style="background:#3fbbc0;color:#fff;">@TempData["SuccessMessage"]</div>
 }
 <!-- Muestra la lista de usuarios y un formulario para asignar roles -->
 <table class="table">
@@ -34,7 +34,7 @@
                                 <option value="Medico">Medico</option>
                                 <option value="Paciente">Paciente</option>
                             </select>
-                            <button type="submit" class="btn btn-success btn-sm ml-2">
+                            <button type="submit" class="btn btn-sm ml-2" style="background:#3fbbc0;color:#fff;border:none;box-shadow:0 2px 8px rgba(63,187,192,0.15);padding:8px 32px;font-size:14px;letter-spacing:1px;border-radius:5px;">
                                 <i class="bi bi-plus-circle"></i> Asignar rol
                             </button>
                         </form>
