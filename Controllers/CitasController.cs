@@ -19,17 +19,26 @@ namespace ClinicaCitas.Controllers
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> AgendarDesdeHome(string name, string email, string phone, string date, string department, string doctor, string message)
     {
-        // Buscar el paciente por el usuario logueado
-        var userName = User.Identity?.Name;
-        var paciente = await _context.Pacientes.FirstOrDefaultAsync(p => p.Nombre == name || p.Telefono == phone || p.CI == userName);
+        // Permitir agendar para hijos/dependientes: buscar paciente por nombre, teléfono y usuario
+        var usuarioId = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
+        // Recibir los nuevos datos del formulario
+        var apellido = Request.Form["apellido"].ToString();
+        var ci = Request.Form["ci"].ToString();
+        if (ci.Length > 20) ci = ci.Substring(0, 20);
+        var fechaNacimientoStr = Request.Form["fechaNacimiento"].ToString();
+        DateTime fechaNacimiento = DateTime.TryParse(fechaNacimientoStr, out var fn) ? fn : DateTime.Now;
+        // Permitir que un usuario tenga varios pacientes (hijos/dependientes)
+        // Buscar paciente por nombre, apellido y usuarioId
+        var paciente = await _context.Pacientes.FirstOrDefaultAsync(p => p.Nombre == name && p.Apellido == apellido && p.UsuarioId == usuarioId);
         if (paciente == null)
         {
             paciente = new Paciente {
                 Nombre = name,
-                Apellido = "",
+                Apellido = apellido,
                 Telefono = phone,
-                CI = userName ?? "",
-                FechaNacimiento = DateTime.Now
+                CI = ci,
+                FechaNacimiento = fechaNacimiento,
+                UsuarioId = usuarioId
             };
             _context.Pacientes.Add(paciente);
             await _context.SaveChangesAsync();
@@ -38,7 +47,7 @@ namespace ClinicaCitas.Controllers
         // department = EspecialidadId, doctor = MedicoId
         if (!int.TryParse(department, out int especialidadId)) especialidadId = 0;
         if (!int.TryParse(doctor, out int medicoId)) medicoId = 0;
-        var medico = await _context.Medicos.FirstOrDefaultAsync(m => m.MedicoId == medicoId && m.EspecialidadId == especialidadId);
+    var medico = await _context.Medicos.Include(m => m.Especialidad).FirstOrDefaultAsync(m => m.MedicoId == medicoId && m.EspecialidadId == especialidadId);
         if (medico == null)
         {
             TempData["CitaAgendada"] = "Error: Debe seleccionar un médico válido.";
@@ -66,17 +75,26 @@ namespace ClinicaCitas.Controllers
     public async Task<IActionResult> Index()
         {
             // Filtrar solo las citas del paciente logueado
-            var userName = User.Identity?.Name;
-            var paciente = await _context.Pacientes.FirstOrDefaultAsync(p => p.CI == userName);
+            var usuarioId = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
+            var pacientes = await _context.Pacientes.Where(p => p.UsuarioId == usuarioId).ToListAsync();
+            List<int> pacienteIds = pacientes.Select(p => p.PacienteId).ToList();
             List<Cita> citas = new List<Cita>();
-            if (paciente != null)
+            if (pacienteIds.Any())
             {
                 citas = await _context.Citas
                     .Include(c => c.Paciente)
                     .Include(c => c.Medico)
                         .ThenInclude(m => m.Especialidad)
-                    .Where(c => c.PacienteId == paciente.PacienteId)
+                    .Where(c => pacienteIds.Contains(c.PacienteId))
                     .ToListAsync();
+                // Forzar carga de especialidad si falta
+                foreach (var cita in citas)
+                {
+                    if (cita.Medico != null && cita.Medico.Especialidad == null)
+                    {
+                        cita.Medico.Especialidad = await _context.Especialidades.FirstOrDefaultAsync(e => e.EspecialidadId == cita.Medico.EspecialidadId);
+                    }
+                }
             }
             return View(citas);
         }

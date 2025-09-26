@@ -66,9 +66,9 @@ app.Use(async (context, next) =>
         Directory.CreateDirectory(Path.GetDirectoryName(logPath)!);
         await File.AppendAllTextAsync(logPath, logLine);
     }
-    catch (Exception ex)
+    catch
     {
-        Console.WriteLine($"Error al escribir en el log: {ex.Message}");
+        // Ignorar cualquier error de log y continuar
     }
 
     await next.Invoke();

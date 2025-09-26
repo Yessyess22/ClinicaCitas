@@ -1,0 +1,30 @@
+@model IEnumerable<ClinicaCitas.Models.Cita>
+@{
+    ViewData["Title"] = "Historial de Citas";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="container mt-5">
+    <h2 style="color:#3fbbc0;">Historial de Citas</h2>
+    <hr />
+    <table class="table table-bordered table-hover">
+        <thead>
+            <tr>
+                <th>Fecha</th>
+                <th>Médico</th>
+                <th>Especialidad</th>
+                <th>Estado</th>
+            </tr>
+        </thead>
+        <tbody>
+        @foreach (var cita in Model)
+        {
+            <tr>
+                <td>@cita.Fecha.ToString("dd/MM/yyyy HH:mm")</td>
+                <td>@cita.Medico?.Nombre @cita.Medico?.Apellido</td>
+                <td>@cita.Medico?.Especialidad?.Nombre</td>
+                <td>@cita.Estado</td>
+            </tr>
+        }
+        </tbody>
+    </table>
+</div>

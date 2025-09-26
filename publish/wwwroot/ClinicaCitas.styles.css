@@ -1,0 +1,46 @@
+/* _content/ClinicaCitas/Views/Shared/_Layout.cshtml.rz.scp.css */
+a.navbar-brand[b-7i7st9piw6] {
+  white-space: normal;
+  text-align: center;
+  word-break: break-all;
+}
+
+a[b-7i7st9piw6] {
+  color: #0077cc;
+}
+
+.btn-primary[b-7i7st9piw6] {
+  color: #fff;
+  background-color: #3fbbc0;
+  border-color: #349fa6;
+}
+
+.nav-pills .nav-link.active[b-7i7st9piw6], .nav-pills .show > .nav-link[b-7i7st9piw6] {
+  color: #fff;
+  background-color: #3fbbc0;
+  border-color: #349fa6;
+}
+
+.border-top[b-7i7st9piw6] {
+  border-top: 1px solid #e5e5e5;
+}
+.border-bottom[b-7i7st9piw6] {
+  border-bottom: 1px solid #e5e5e5;
+}
+
+.box-shadow[b-7i7st9piw6] {
+  box-shadow: 0 .25rem .75rem rgba(0, 0, 0, .05);
+}
+
+button.accept-policy[b-7i7st9piw6] {
+  font-size: 1rem;
+  line-height: inherit;
+}
+
+.footer[b-7i7st9piw6] {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  white-space: nowrap;
+  line-height: 60px;
+}

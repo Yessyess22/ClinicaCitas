@@ -138,6 +138,9 @@ namespace ClinicaCitas.Migrations
                         .HasMaxLength(20)
                         .HasColumnType("varchar(20)");
 
+                    b.Property<string>("UsuarioId")
+                        .HasColumnType("longtext");
+
                     b.HasKey("PacienteId");
 
                     b.ToTable("Pacientes");

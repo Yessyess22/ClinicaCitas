@@ -15,14 +15,25 @@
     <form action="/Citas/AgendarDesdeHome" method="post" role="form">
             @Html.AntiForgeryToken()
             <div class="row">
-                <div class="col-md-4 form-group">
-                    <input type="text" name="name" class="form-control" id="name" placeholder="Nombre Completo" required="">
+                <div class="col-md-3 form-group">
+                    <label for="name" class="form-label">Nombre</label>
+                    <input type="text" name="name" class="form-control" id="name" placeholder="Nombre" required>
                 </div>
-                <div class="col-md-4 form-group mt-3 mt-md-0">
-                    <input type="email" class="form-control" name="email" id="email" placeholder="Tu Correo Electrónico" required="">
+                <div class="col-md-3 form-group mt-3 mt-md-0">
+                    <label for="apellido" class="form-label">Apellido</label>
+                    <input type="text" name="apellido" class="form-control" id="apellido" placeholder="Apellido" required>
                 </div>
-                <div class="col-md-4 form-group mt-3 mt-md-0">
-                    <input type="tel" class="form-control" name="phone" id="phone" placeholder="Tu Teléfono" required="">
+                <div class="col-md-2 form-group mt-3 mt-md-0">
+                    <label for="ci" class="form-label">CI (opcional)</label>
+                    <input type="text" name="ci" class="form-control" id="ci" placeholder="CI (opcional)" maxlength="20">
+                </div>
+                <div class="col-md-2 form-group mt-3 mt-md-0">
+                    <label for="fechaNacimiento" class="form-label">Fecha de nacimiento</label>
+                    <input type="date" name="fechaNacimiento" class="form-control" id="fechaNacimiento" placeholder="Fecha de nacimiento">
+                </div>
+                <div class="col-md-2 form-group mt-3 mt-md-0">
+                    <label for="phone" class="form-label">Teléfono</label>
+                    <input type="tel" class="form-control" name="phone" id="phone" placeholder="Teléfono" required>
                 </div>
             </div>
             <div class="row">
